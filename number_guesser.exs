@@ -10,7 +10,7 @@ defmodule Guesser.Server do
 
   def play(guessed_num, tries, player \\ 1) do
     receive do
-      {guessed_num, receiver} ->
+      {num, receiver} when num == guessed_num ->
         send(receiver, {:game_over, "Player #{player} guessed number #{guessed_num}"})
 
       {_num, receiver} when Integer.is_even(player) and tries > 1 ->
@@ -51,7 +51,7 @@ defmodule Guesser.Client do
   defp start_game({{num, _}, {tries, _}})
        when is_integer(num) and is_integer(tries) and num > 0 and tries > 0 do
     Guesser.Server.start(num, tries)
-    IO.puts("Try to guess number from 0 to #{num}!")
+    IO.puts("Try to guess number from 1 to #{num}!")
     make_move()
   end
 
